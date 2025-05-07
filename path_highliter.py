@@ -78,7 +78,6 @@ class RoadDataset(Dataset):
         mask_path = os.path.join(self.img_dir, img_name.replace('.jpg', '_path.jpg'))
         image = Image.open(img_path).convert('RGB')
         mask_img = Image.open(mask_path).convert('RGB')
-        # 提取mask (假设淡红色 R>200, G<120, B<120)
         mask_np = np.array(mask_img)
         mask = ((mask_np[:,:,0] > 200) & (mask_np[:,:,1] < 120) & (mask_np[:,:,2] < 120)).astype(np.float32)
         mask = Image.fromarray((mask*255).astype(np.uint8))
@@ -88,7 +87,7 @@ class RoadDataset(Dataset):
             mask = self.mask_transform(mask)
         return image, mask
 
-# # 常用transform
+
 if __name__ == '__main__':
     img_size = 256
     transform = transforms.Compose([
