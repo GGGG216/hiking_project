@@ -10,7 +10,6 @@ def get_image_files(folder):
     return [f for f in os.listdir(folder) if f.lower().endswith('.jpg') and "_path" not in f]
 
 def paint_mask(image):
-    # 缩小图片，避免超大卡顿
     max_side = 1024
     h, w = image.shape[:2]
     scale = min(max_side / max(h, w), 1.0)
@@ -45,7 +44,6 @@ def paint_mask(image):
         cv2.imshow('Annotating', display)
         key = cv2.waitKey(10) & 0xFF
         if key == ord('s'):
-            # 返回原尺寸mask
             if scale < 1.0:
                 mask_full = cv2.resize(mask, (w, h), interpolation=cv2.INTER_NEAREST)
                 return mask_full
