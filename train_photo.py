@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
 
-# 引入UNet
 from path_highliter import UNet
 
 class RoadDifficultyDataset(Dataset):
@@ -27,8 +26,6 @@ class RoadDifficultyDataset(Dataset):
         label_path = os.path.join(self.img_dir, img_name.replace('.jpg', '.txt'))
 
         image = Image.open(img_path).convert('RGB')
-        
-        # 读取label
         with open(label_path, 'r') as f:
             label = int(f.read().strip()) - 1
 
