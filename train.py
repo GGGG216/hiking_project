@@ -58,21 +58,12 @@ class DifficultyDataset(Dataset):
         npy_name = self.npy_files[idx]
         npy_path = os.path.join(self.npy_dir, npy_name)
         label_path = npy_path.replace('.npy', '.txt')
-
-        # 加载深度矩阵
         depth_map = np.load(npy_path)
-
-        # 添加通道维度 (从 [H, W] -> [1, H, W])
         depth_map = np.expand_dims(depth_map, axis=0).astype(np.float32)
-
-        # 加载对应的标签
         with open(label_path, 'r') as f:
-            label = int(f.read().strip()) - 1  # 将标签从 1-5 转换为 0-4
-
-        # 返回张量
+            label = int(f.read().strip()) - 1  
         return torch.tensor(depth_map), torch.tensor(label)
 
-# SE-Block: Squeeze-and-Excitation Block
 class SEBlock(nn.Module):
     def __init__(self, in_channels, reduction=16):
         super(SEBlock, self).__init__()
@@ -81,7 +72,7 @@ class SEBlock(nn.Module):
 
     def forward(self, x):
         batch, channels, _, _ = x.size()
-        y = torch.mean(x, dim=(2, 3))  # Global Average Pooling
+        y = torch.mean(x, dim=(2, 3)) 
         y = F.relu(self.fc1(y))
         y = torch.sigmoid(self.fc2(y))
         y = y.view(batch, channels, 1, 1)
